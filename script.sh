@@ -107,7 +107,7 @@ function delete_site() {
 
     # Delete the local files
     rm -r $1
-
+    docker rmi -f $(docker images -a -q)
     # Print a success message
     echo "Site deleted!"
 }
