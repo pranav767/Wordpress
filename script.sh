@@ -1,7 +1,6 @@
 #!/bin/bash
 
 ##Docker and Docker Compose
-
 # Check if docker is installed
 if ! [ -x "$(command -v docker)" ]; then
   # Install docker if not present
@@ -38,7 +37,7 @@ fi
 SITE_NAME=$1
 
 # Create a directory for the WordPress site
-mkdir $SITE_NAME
+mkdir -p $SITE_NAME
 cd $SITE_NAME
 
 # Create a docker-compose.yml file
@@ -71,20 +70,24 @@ services:
       - 80:80
 EOF
 
-# Start WordPress site using Docker Compose
-docker-compose -f docker-compose.yml up -d --quiet-pull
+# Check if the first argument is blank
+if [ -z "$2" ]; then
+  # If no second argument is provided run script in enable mode
+  # Start WordPress site using Docker Compose
+  docker-compose -f docker-compose.yml up -d --quiet-pull
 
-# Add site_url to /etc/hosts file
-echo "127.0.0.1:8080 $1" >> /etc/hosts
+  # Add site_url to /etc/hosts file
+  echo "127.0.0.1:8080 $1" >> /etc/hosts
 
-# Open the website in Firefox
-firefox http://$1:8080
+  # Open the website in Firefox
+  firefox http://$1:8080
+fi
 
 # Define a function to enable the site
 function enable_site() {
     # Start the containers
     docker-compose up -d
-
+    firefox http://$1:8080
     # Print a success message
     echo "Site enabled!"
 }
@@ -120,7 +123,4 @@ elif [ "$2" == "disable" ]; then
 elif [ "$2" == "delete" ]; then
     # Delete the site
     delete_site
-else
-    # Print an error message
-    echo "Invalid subcommand. Use 'enable', 'disable', or 'delete'."
 fi
