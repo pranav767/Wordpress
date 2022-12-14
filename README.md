@@ -1,4 +1,4 @@
-# Wordpress
+# Create Wordpress site using docker images
 
 This is a simple shell script which will help you to create a WordPress site using the latest WordPress Version by LEMP stack using docker .
 
