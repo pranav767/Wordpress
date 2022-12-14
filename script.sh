@@ -80,8 +80,6 @@ echo "127.0.0.1:8080 $1" >> /etc/hosts
 # Open the website in Firefox
 firefox http://$1:8080
 
-#!/bin/bash
-
 # Define a function to enable the site
 function enable_site() {
     # Start the containers
@@ -106,7 +104,7 @@ function delete_site() {
     docker-compose stop
 
     # Delete the local files
-    rm -r $1
+    rm -rf ../$SITE_NAME
     docker rmi -f $(docker images -a -q)
     # Print a success message
     echo "Site deleted!"
